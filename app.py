@@ -20,12 +20,15 @@
 from flask import Flask, render_template, redirect, url_for
 # from flask import Flask, render_template
 # from flask import redirect
+from db import get_conn, init_db
+from article_fetch import fetch_and_save
 import sqlite3
 import os
 
 # ------------------------------
 # 1️⃣ 创建 Flask 应用实例
 # ------------------------------
+init_db()  # 初始化数据库  
 app = Flask(__name__)
 
 # ------------------------------
@@ -39,7 +42,8 @@ DB_FILE = os.path.join(BASE_DIR, "data", "rss_news.db")
 # ------------------------------
 @app.route("/")
 def index():
-    conn = sqlite3.connect(DB_FILE)
+    #conn = sqlite3.connect(DB_FILE)
+    conn = get_conn()
     c = conn.cursor()
     c.execute("SELECT id, feed_name, title, link, published, favorite FROM news ORDER BY id DESC")
     news_list = c.fetchall()
@@ -52,7 +56,8 @@ def index():
 
 @app.route("/favorites/<int:news_id>")
 def favorite(news_id):
-    conn = sqlite3.connect(DB_FILE)
+    #conn = sqlite3.connect(DB_FILE)
+    conn = get_conn()
     c = conn.cursor()
 
     c.execute("""
@@ -88,7 +93,8 @@ def unfavorite(news_id):
 @app.route("/favorites")
 def favorites():
 
-    conn = sqlite3.connect(DB_FILE)
+    #conn = sqlite3.connect(DB_FILE)
+    conn = get_conn()
     c = conn.cursor()
 
     c.execute("""
@@ -110,6 +116,14 @@ def favorites():
         "favorites.html",
         news_list=news_list
     )
+
+@app.route("/fetch/<int:news_id>")
+def fetch_article(news_id):
+    # 1. 从数据库拿 link
+    # 2. 抓取网页内容 -> Markdown
+    # 3. AI 摘要
+    # 4. 保存文件路径和摘要到数据库
+    return redirect(url_for("favorites"))
 
 # ------------------------------
 # 4️⃣ 启动

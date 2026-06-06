@@ -1,0 +1,9 @@
+flask                 # Web 展示和路由
+feedparser            # RSS feed 解析
+pyyaml                # 配置 feeds.yaml
+requests              # HTTP 请求
+beautifulsoup4        # 网页解析
+markdownify           # HTML 转 Markdown
+trafilatura           # 网页文本提取 / 抽取正文
+openai                # AI 摘要
+python-dotenv         # 从 .env 文件读取环境变量

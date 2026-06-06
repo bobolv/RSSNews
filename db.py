@@ -4,8 +4,13 @@ from pathlib import Path
 DB_FILE = Path("data/rss_news.db")
 DB_FILE.parent.mkdir(exist_ok=True)
 
-def init_db():
+def get_conn():
     conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_db():
+    conn = get_conn()
     c = conn.cursor()
     c.execute("""
         CREATE TABLE IF NOT EXISTS news (
@@ -14,7 +19,9 @@ def init_db():
             title TEXT,
             link TEXT UNIQUE,
             published TEXT,
-            favorite INTEGER DEFAULT 0
+            favorite INTEGER DEFAULT 0,
+            markdown_path TEXT,
+            summary TEXT
         )
     """)
     conn.commit()
