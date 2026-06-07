@@ -9,12 +9,8 @@ feeds:
     url: "http://www.ruanyifeng.com/blog/atom.xml"
   - name: "GitHub Blog"
     url: "https://github.blog/feed/"
-  - name: "Google AI Blog"
-    url: "https://ai.googleblog.com/feeds/posts/default"
   - name: "Microsoft Research Blog"
     url: "https://www.microsoft.com/en-us/research/blog/feed/"
-  - name: "TechCrunch"
-    url: "http://feeds.feedburner.com/TechCrunch/"
   - name: "The Verge"
     url: "https://www.theverge.com/rss/index.xml"
     

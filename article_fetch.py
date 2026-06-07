@@ -51,7 +51,7 @@ def fetch_and_save(news_id):
     # 更新数据库
     c.execute("""
         UPDATE news 
-        SET markdown_path=?, summary=? 
+        SET markdown_path=?, summary=?, status = 2
         WHERE id=?
     """, (path, summary, news_id))
     conn.commit()

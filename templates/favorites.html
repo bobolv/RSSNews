@@ -14,7 +14,7 @@
 
 <ul>
 
-{% for id, feed_name, title, link, published in news_list %}
+{% for id, feed_name, title, link, published, status in news_list %}
 
 <li>
 
@@ -28,10 +28,13 @@
 
 <a href="/unfavorite/{{ id }}">
     ❌ 取消收藏?
-</a>
-<a href="/fetch/{{ id }}">📥 加入知识库</a>
-</li>
+{% if status == 1 %}
+    <a href="/fetch/{{ id }}">📥 加入知识库</a>
+{% else %}
+    <span>📚 已入库</span>
+{% endif %}
 
+</li>
 {% endfor %}
 
 </ul>

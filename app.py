@@ -62,7 +62,8 @@ def favorite(news_id):
 
     c.execute("""
         UPDATE news
-        SET favorite=1
+        SET favorite=1,
+            status = 1
         WHERE id=?
     """,(news_id,))
 
@@ -80,7 +81,8 @@ def unfavorite(news_id):
 
     c.execute("""
         UPDATE news
-        SET favorite = 0
+        SET favorite = 0,
+            status = 0
         WHERE id = ?
     """, (news_id,))
 
@@ -102,7 +104,8 @@ def favorites():
                feed_name,
                title,
                link,
-               published
+               published,
+               status
         FROM news
         WHERE favorite = 1
         ORDER BY id DESC
@@ -123,6 +126,7 @@ def fetch_article(news_id):
     # 2. 抓取网页内容 -> Markdown
     # 3. AI 摘要
     # 4. 保存文件路径和摘要到数据库
+    fetch_and_save(news_id)
     return redirect(url_for("favorites"))
 
 # ------------------------------
