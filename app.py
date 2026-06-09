@@ -36,7 +36,7 @@ app = Flask(__name__)
 # ------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_FILE = os.path.join(BASE_DIR, "data", "rss_news.db")
-
+print("cwd =", os.getcwd())
 # ------------------------------
 # 3️⃣ 路由
 # ------------------------------
