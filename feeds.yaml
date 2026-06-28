@@ -1,16 +1,15 @@
 feeds:
-  - name: "OpenAI Blog"
-    url: "https://openai.com/blog/rss/"
-  - name: "Docker Blog"
-    url: "https://www.docker.com/blog/feed/"
-  - name: "36Ke"
-    url: "https://36kr.com/feed/"
-  - name: "阮一峰blog"
-    url: "http://www.ruanyifeng.com/blog/atom.xml"
-  - name: "GitHub Blog"
-    url: "https://github.blog/feed/"
-  - name: "Microsoft Research Blog"
-    url: "https://www.microsoft.com/en-us/research/blog/feed/"
-  - name: "The Verge"
-    url: "https://www.theverge.com/rss/index.xml"
-    
+  - name: OpenAI Blog
+    url: https://openai.com/blog/rss/
+  - name: Docker Blog
+    url: https://www.docker.com/blog/feed/
+  - name: 36Kr
+    url: https://36kr.com/feed/
+  - name: Ruan Yifeng Blog
+    url: http://www.ruanyifeng.com/blog/atom.xml
+  - name: GitHub Blog
+    url: https://github.blog/feed/
+  - name: Microsoft Research Blog
+    url: https://www.microsoft.com/en-us/research/blog/feed/
+  - name: The Verge
+    url: https://www.theverge.com/rss/index.xml

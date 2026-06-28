@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RSS Sources</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page">
+        <header class="topbar">
+            <h1>RSS &#28304;&#31649;&#29702;</h1>
+            <div class="toolbar">
+                <a class="nav-link" href="{{ url_for('index') }}">&#36820;&#22238;&#39318;&#39029;</a>
+                <a class="nav-link" href="{{ url_for('favorites') }}">&#25105;&#30340;&#25910;&#34255;</a>
+            </div>
+        </header>
+
+        {% if message %}
+        <p class="notice">{{ message }}</p>
+        {% endif %}
+
+        <section class="panel">
+            <h2>&#36873;&#25321;&#35201;&#25235;&#21462;&#30340; RSS &#28304;</h2>
+            <form method="post" action="{{ url_for('refresh_fetch') }}">
+                <div class="feed-list">
+                    {% for feed in feeds %}
+                    <label class="feed-row">
+                        <input type="checkbox" name="feeds" value="{{ feed.name }}" checked>
+                        <span class="feed-main">
+                            <strong>{{ feed.name }}</strong>
+                            <span>{{ feed.url }}</span>
+                        </span>
+                        <span class="feed-state">
+                            {% if feed.last_fetched_at %}
+                            &#19978;&#27425;&#65306;{{ feed.last_fetched_at }}
+                            <br>
+                            &#21457;&#29616; {{ feed.last_entry_count or 0 }} / &#26032;&#22686; {{ feed.last_new_count or 0 }}
+                            {% else %}
+                            &#23578;&#26410;&#25235;&#21462;
+                            {% endif %}
+                            {% if feed.last_error %}
+                            <br><span class="error">{{ feed.last_error }}</span>
+                            {% endif %}
+                        </span>
+                    </label>
+                    {% else %}
+                    <p class="empty">&#26242;&#26080; RSS &#28304;&#12290;</p>
+                    {% endfor %}
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="primary-button">&#25235;&#21462;&#36873;&#20013;&#28304;</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>&#26032;&#22686; RSS &#28304;</h2>
+            <form method="post" action="{{ url_for('feeds_add') }}" class="add-feed-form">
+                <label>
+                    <span>&#21517;&#31216;</span>
+                    <input type="text" name="name" placeholder="Example Blog" required>
+                </label>
+                <label>
+                    <span>RSS URL</span>
+                    <input type="url" name="url" placeholder="https://example.com/feed.xml" required>
+                </label>
+                <button type="submit">&#26032;&#22686;</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

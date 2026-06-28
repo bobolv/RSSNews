@@ -1,0 +1,15 @@
+services:
+  rssnews:
+    build: .
+    container_name: rssnews
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      DB_FILE: /data/rss_news.db
+      KNOWLEDGE_DIR: /data/knowledge
+    volumes:
+      - ./data:/data
+      - "Z:/RSS/knowledge:/data/knowledge"
+    restart: unless-stopped

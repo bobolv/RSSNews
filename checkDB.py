@@ -1,11 +1,19 @@
-import sqlite3
+from db import get_conn, init_db
 
-conn = sqlite3.connect("data/rss_news.db")
-c = conn.cursor()
 
-# 查看字段
-c.execute("PRAGMA table_info(news)")
-for row in c.fetchall():
-    print(row)
+def main():
+    init_db()
+    conn = get_conn()
+    c = conn.cursor()
 
-conn.close()
+    print("news columns:")
+    for row in c.execute("PRAGMA table_info(news)").fetchall():
+        print(tuple(row))
+
+    count = c.execute("SELECT COUNT(*) FROM news").fetchone()[0]
+    print(f"news count: {count}")
+    conn.close()
+
+
+if __name__ == "__main__":
+    main()

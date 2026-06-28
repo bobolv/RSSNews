@@ -1,29 +1,16 @@
-# migrate.py
+from db import get_conn, init_db
 
-import sqlite3
 
-conn = sqlite3.connect("data/rss_news.db")
+def main():
+    init_db()
+    conn = get_conn()
+    columns = conn.execute("PRAGMA table_info(news)").fetchall()
+    conn.close()
 
-c = conn.cursor()
+    print("Migration OK")
+    for column in columns:
+        print(f"- {column['name']} {column['type']}")
 
-columns = [x[1] for x in c.execute(
-    "PRAGMA table_info(news)"
-).fetchall()]
 
-if "markdown_path" not in columns:
-    c.execute("""
-    ALTER TABLE news
-    ADD COLUMN markdown_path TEXT
-    """)
-
-if "status" not in columns:
-    c.execute("""
-    ALTER TABLE news
-    ADD COLUMN status INTEGER DEFAULT 0
-    """)
-
-conn.commit()
-
-print("Migration OK")
-
-conn.close()
+if __name__ == "__main__":
+    main()

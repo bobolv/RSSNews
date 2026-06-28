@@ -1,40 +1,26 @@
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
+import argparse
+from pathlib import Path
 
-load_dotenv()
+from article_fetch import summarize
 
-client = OpenAI(
-    api_key=os.getenv("ARK_API_KEY"),
-    base_url="https://ark.cn-beijing.volces.com/api/v3"
-)
 
-def summarize_markdown(content):
+def main():
+    parser = argparse.ArgumentParser(description="为 Markdown 文件生成摘要")
+    parser.add_argument("markdown_path", help="Markdown 文件路径")
+    args = parser.parse_args()
 
-    response = client.chat.completions.create(
-        model=os.getenv("ARK_MODEL"),
-        messages=[
-            {
-                "role": "system",
-                "content": "你是技术情报分析助手。"
-            },
-            {
-                "role": "user",
-                "content": f"""
-                请阅读以下文章并输出：
-                    # 一句话总结
-                    # 三个关键观点
-                    # 对运维工程师的价值
-                    文章内容：{content[:12000]}
-                """
-            }
-        ],
-        temperature=0.3
-    )
+    path = Path(args.markdown_path)
+    content = path.read_text(encoding="utf-8")
+    result = summarize(content)
+    if isinstance(result, dict):
+        print(result["summary"])
+        if result.get("tags"):
+            print("\nTags:")
+            for tag in result["tags"]:
+                print(f"- {tag.get('en', '')} / {tag.get('zh', '')}")
+    else:
+        print(result)
 
-    return response.choices[0].message.content
 
-with open(md_path, "r", encoding="utf-8") as f:
-    content = f.read()
-
-summary = summarize_markdown(content)
+if __name__ == "__main__":
+    main()

@@ -1,28 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RSS News</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>最新新闻</h1>
-    <a href="/favorites">⭐ 我的收藏</a>
+    <main class="page">
+        <header class="topbar">
+            <h1>&#26368;&#26032;&#26032;&#38395;</h1>
+            <div class="toolbar">
+                <a class="button-link" href="{{ url_for('refresh') }}">&#33719;&#21462;&#26368;&#26032; RSS</a>
+                <a class="nav-link" href="{{ url_for('favorites') }}">&#25105;&#30340;&#25910;&#34255;</a>
+            </div>
+        </header>
 
-    <hr>
+        <section class="compact-list">
+            {% for item in news_list %}
+            <article id="news-{{ item.id }}" class="compact-item feed-color-{{ item.feed_color }}">
+                <div class="compact-main">
+                    <a class="compact-title" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+                        {{ item.title }}
+                    </a>
+                    <div class="compact-meta">
+                        <span>{{ item.feed_name }}</span>
+                        <time>{% if item.published %}{{ item.published }}{% else %}&#26410;&#30693;&#26102;&#38388;{% endif %}</time>
+                    </div>
+                </div>
 
-    <ul>
-    {% for id, feed_name, title, link, published, favorite in news_list %}
-        <li>
-            <strong>{{ feed_name }}</strong>:
-            <a href="{{ link }}" target="_blank">{{ title }}</a>
-            ({{ published }})
-            {% if favorite == 1 %}
-                <a href="/unfavorite/{{ id }}"> ❌ 取消收藏 </a>
+                <div class="compact-actions">
+                    <form method="post" action="{{ url_for('unfavorite' if item.favorite == 1 else 'favorite', news_id=item.id, next='index') }}">
+                        <button type="submit" class="small-button">
+                            {% if item.favorite == 1 %}&#24050;&#25910;&#34255;{% else %}&#25910;&#34255;{% endif %}
+                        </button>
+                    </form>
+
+                    {% if item.favorite == 1 %}
+                        {% if item.retryable %}
+                        <form method="post" action="{{ url_for('fetch_article', news_id=item.id, next='index') }}">
+                            <button type="submit" class="small-button primary">
+                                {% if item.status == 3 %}&#37325;&#26032;&#20837;&#24211;{% else %}&#20837;&#24211;{% endif %}
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="status">&#24050;&#20837;&#24211;</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </article>
             {% else %}
-                <a href="/favorites/{{ id }}"> ⭐ 收藏 </a>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
+            <p class="empty">&#26242;&#26080;&#26032;&#38395;&#65292;&#35831;&#20808;&#36816;&#34892; RSS &#25235;&#21462;&#12290;</p>
+            {% endfor %}
+        </section>
+    </main>
 </body>
 </html>

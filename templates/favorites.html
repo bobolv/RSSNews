@@ -1,43 +1,57 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>我的收藏</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>&#25105;&#30340;&#25910;&#34255;</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <main class="page">
+        <header class="topbar">
+            <h1>&#25105;&#30340;&#25910;&#34255;</h1>
+            <a class="nav-link" href="{{ url_for('index') }}">&#36820;&#22238;&#39318;&#39029;</a>
+        </header>
 
-<h1>⭐ 我的收藏</h1>
+        <section class="news-list">
+            {% for item in news_list %}
+            <article id="news-{{ item.id }}" class="news-item">
+                <div class="meta">
+                    <span>{{ item.feed_name }}</span>
+                    <time>{% if item.published %}{{ item.published }}{% else %}&#26410;&#30693;&#26102;&#38388;{% endif %}</time>
+                </div>
+                <a class="title" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+                    {{ item.title }}
+                </a>
 
-<a href="/">返回首页</a>
+                {% if item.summary %}
+                <p class="summary">{{ item.summary }}</p>
+                {% endif %}
 
-<hr>
+                {% if item.markdown_path %}
+                <p class="path">&#24050;&#20445;&#23384;&#65306;{{ item.markdown_path }}</p>
+                {% endif %}
 
-<ul>
+                <div class="actions">
+                    <form method="post" action="{{ url_for('unfavorite', news_id=item.id, next='favorites') }}">
+                        <button type="submit">&#21462;&#28040;&#25910;&#34255;</button>
+                    </form>
 
-{% for id, feed_name, title, link, published, status in news_list %}
-
-<li>
-
-<strong>{{ feed_name }}</strong>
-
-<a href="{{ link }}" target="_blank">
-{{ title }}
-</a>
-
-({{ published }})
-
-<a href="/unfavorite/{{ id }}">
-    ❌ 取消收藏?
-{% if status == 1 %}
-    <a href="/fetch/{{ id }}">📥 加入知识库</a>
-{% else %}
-    <span>📚 已入库</span>
-{% endif %}
-
-</li>
-{% endfor %}
-
-</ul>
-
+                    {% if item.retryable %}
+                    <form method="post" action="{{ url_for('fetch_article', news_id=item.id) }}">
+                        <button type="submit">
+                            {% if item.status == 3 %}&#37325;&#26032;&#21152;&#20837;&#30693;&#35782;&#24211;{% else %}&#21152;&#20837;&#30693;&#35782;&#24211;{% endif %}
+                        </button>
+                    </form>
+                    {% else %}
+                    <span class="status">&#24050;&#20837;&#24211;</span>
+                    {% endif %}
+                </div>
+            </article>
+            {% else %}
+            <p class="empty">&#26242;&#26080;&#25910;&#34255;&#12290;</p>
+            {% endfor %}
+        </section>
+    </main>
 </body>
 </html>

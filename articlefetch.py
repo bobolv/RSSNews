@@ -1,20 +1,17 @@
-# article_fetch.py
+import argparse
 
 import trafilatura
 
-url = "https://www.docker.com/blog/meet-gordon-dockers-ai-agent-for-your-entire-container-workflow/"
 
-downloaded = trafilatura.fetch_url(url)
+def main():
+    parser = argparse.ArgumentParser(description="测试抓取指定 URL 的正文 Markdown")
+    parser.add_argument("url", help="文章 URL")
+    args = parser.parse_args()
 
-content = trafilatura.extract(
-    downloaded,
-    output_format="markdown"
-)
+    downloaded = trafilatura.fetch_url(args.url)
+    content = trafilatura.extract(downloaded, output_format="markdown") if downloaded else ""
+    print((content or "")[:4000])
 
-print(content[:1000])
-with open(
-    "knowledge/test.md",
-    "w",
-    encoding="utf-8"
-) as f:
-    f.write(content)
+
+if __name__ == "__main__":
+    main()
