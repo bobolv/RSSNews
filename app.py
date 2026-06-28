@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 
 def should_fetch_on_startup():
-    return os.getenv("FETCH_ON_STARTUP", "1").lower() not in {"0", "false", "no"}
+    return os.getenv("FETCH_ON_STARTUP", "0").lower() in {"1", "true", "yes"}
 
 
 if should_fetch_on_startup():
