@@ -335,6 +335,19 @@ button:hover {
     overflow: hidden;
 }
 
+.selection-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.selection-actions button {
+    min-height: 30px;
+    padding: 0 12px;
+    font-size: 13px;
+}
+
 .feed-row {
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) 260px;

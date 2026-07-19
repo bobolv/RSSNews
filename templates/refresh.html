@@ -22,7 +22,11 @@
 
         <section class="panel">
             <h2>&#36873;&#25321;&#35201;&#25235;&#21462;&#30340; RSS &#28304;</h2>
-            <form method="post" action="{{ url_for('refresh_fetch') }}">
+            <form method="post" action="{{ url_for('refresh_fetch') }}" id="feed-select-form">
+                <div class="selection-actions">
+                    <button type="button" data-select-feeds="all">&#20840;&#36873;</button>
+                    <button type="button" data-select-feeds="none">&#21462;&#28040;&#20840;&#36873;</button>
+                </div>
                 <div class="feed-list">
                     {% for feed in feeds %}
                     <label class="feed-row">
@@ -69,5 +73,17 @@
             </form>
         </section>
     </main>
+    <script>
+        document.querySelectorAll("[data-select-feeds]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const checked = button.dataset.selectFeeds === "all";
+                document
+                    .querySelectorAll('#feed-select-form input[name="feeds"]')
+                    .forEach((checkbox) => {
+                        checkbox.checked = checked;
+                    });
+            });
+        });
+    </script>
 </body>
 </html>
