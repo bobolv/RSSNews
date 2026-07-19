@@ -9,6 +9,8 @@ feeds:
     url: http://www.ruanyifeng.com/blog/atom.xml
   - name: GitHub Blog
     url: https://github.blog/feed/
+  - name: AI CLI工具社区动态日报
+    url: https://duanyytop.github.io/agents-radar/feed.xml
   - name: Microsoft Research Blog
     url: https://www.microsoft.com/en-us/research/blog/feed/
   - name: The Verge

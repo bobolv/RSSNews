@@ -36,7 +36,7 @@ python rss_fetch.py
 
 ## Docker Run
 
-Create `.env` first:
+Make sure Docker Desktop is running and is using Linux containers. Create `.env` first:
 
 ```powershell
 copy .env.example .env
@@ -59,16 +59,59 @@ Start:
 docker compose up -d --build
 ```
 
+If a local `python app.py` instance is already using port 5000, stop it before running Compose.
+
 Check:
 
 ```powershell
 docker compose ps
-docker compose logs -f
+docker compose logs --tail 100 rssnews
+```
+
+Open `http://127.0.0.1:5000` after the container reports `healthy`.
+
+To build and run without Compose:
+
+```powershell
+docker build -t rssnews:local .
+docker run -d --name rssnews --restart unless-stopped `
+  -p 5000:5000 --env-file .env `
+  -v "${PWD}/data:/data" `
+  -v "${PWD}/knowledge:/data/knowledge" `
+  rssnews:local
+```
+
+Stop or remove the Compose container:
+
+```powershell
+docker compose stop
+docker compose down
+```
+
+## Tailscale Access
+
+Docker Desktop may only expose the published port reliably on localhost. To make the app available
+privately to other devices in the same tailnet, forward the Tailscale port to the local container:
+
+```powershell
+tailscale serve --bg --tcp=5000 tcp://127.0.0.1:5000
+tailscale serve --bg --http=80 http://127.0.0.1:5000
+tailscale serve status
+```
+
+For browser access, prefer the MagicDNS URL shown by `tailscale serve status`, without a port,
+for example `http://home-desktop.tailefd88c.ts.net/`. The raw Tailscale IP remains available on
+port 5000 for clients that support it.
+The background Serve configuration persists across Tailscale restarts. To disable it:
+
+```powershell
+tailscale serve --tcp=5000 off
+tailscale serve --http=80 off
 ```
 
 ## Volumes
 
-For local, portable storage:
+Docker Desktop uses local, portable storage by default:
 
 ```yaml
 volumes:
